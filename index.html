@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Data System - نظام قاعدة بيانات الشرطة</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <h1 class="logo">🚔 POLICE DATA SYSTEM</h1>
+                <p class="tagline">نظام قاعدة بيانات الشرطة المتكاملة</p>
+            </div>
+            <div class="user-info">
+                <span id="userName">الضابط</span>
+                <button class="logout-btn" onclick="logout()">تسجيل خروج</button>
+            </div>
+        </header>
+
+        <!-- Main Navigation -->
+        <nav class="nav-bar">
+            <button class="nav-btn active" onclick="showSection('search')">🔍 بحث</button>
+            <button class="nav-btn" onclick="showSection('add-citizen')">➕ إضافة مواطن</button>
+            <button class="nav-btn" onclick="showSection('add-vehicle')">🚗 إضافة سيارة</button>
+            <button class="nav-btn" onclick="showSection('records')">📋 السجلات</button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Search Section -->
+            <section id="search" class="section active">
+                <div class="section-header">
+                    <h2>🔍 البحث عن البيانات</h2>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="أدخل لوحة السيارة (مثال: ABC-123)" class="search-input">
+                    <button onclick="searchByPlate()" class="search-btn">بحث</button>
+                </div>
+
+                <div id="searchResults" class="results-container" style="display: none;">
+                    <div class="result-card">
+                        <div class="card-section">
+                            <h3>📋 بيانات المواطن</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>الاسم الكامل:</label>
+                                    <span id="citizenName">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>العمر:</label>
+                                    <span id="citizenAge">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>تاريخ الازدياد:</label>
+                                    <span id="citizenBirthDate">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>الوظيفة:</label>
+                                    <span id="citizenJob">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>رقم الهاتف:</label>
+                                    <span id="citizenPhone">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>العنوان:</label>
+                                    <span id="citizenAddress">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>رقم الهوية:</label>
+                                    <span id="citizenID">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-section">
+                            <h3>🚗 بيانات المركبة</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>لوحة السيارة:</label>
+                                    <span id="vehiclePlate">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>نوع السيارة:</label>
+                                    <span id="vehicleType">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>اللون:</label>
+                                    <span id="vehicleColor">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>سنة الصنع:</label>
+                                    <span id="vehicleYear">-</span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <label>حالة المركبة:</label>
+                                    <span id="vehicleStatus">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-section">
+                            <h3>🚨 السجل الأمني</h3>
+                            <div class="info-grid">
+                                <div class="info-item full-width">
+                                    <label>المخالفات:</label>
+                                    <span id="violations">-</span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <label>الغرامات:</label>
+                                    <span id="fines">-</span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <label>البلاغات:</label>
+                                    <span id="reports">-</span>
+                                </div>
+                                <div class="info-item full-width">
+                                    <label>ملاحظات:</label>
+                                    <textarea id="notes" class="notes-area" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="noResults" class="no-results" style="display: none;">
+                    <p>❌ لم يتم العثور على بيانات</p>
+                </div>
+            </section>
+
+            <!-- Add Citizen Section -->
+            <section id="add-citizen" class="section">
+                <div class="section-header">
+                    <h2>➕ إضافة مواطن جديد</h2>
+                </div>
+                <form class="form" onsubmit="addCitizen(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الاسم الكامل:</label>
+                            <input type="text" id="newCitizenName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>العمر:</label>
+                            <input type="number" id="newCitizenAge" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>تاريخ الازدياد:</label>
+                            <input type="date" id="newCitizenBirthDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهوية:</label>
+                            <input type="text" id="newCitizenID" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الوظيفة:</label>
+                            <input type="text" id="newCitizenJob">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف:</label>
+                            <input type="tel" id="newCitizenPhone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>العنوان:</label>
+                            <input type="text" id="newCitizenAddress" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">✅ حفظ البيانات</button>
+                </form>
+            </section>
+
+            <!-- Add Vehicle Section -->
+            <section id="add-vehicle" class="section">
+                <div class="section-header">
+                    <h2>🚗 إضافة سيارة جديدة</h2>
+                </div>
+                <form class="form" onsubmit="addVehicle(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>لوحة السيارة:</label>
+                            <input type="text" id="newVehiclePlate" placeholder="ABC-123" required>
+                        </div>
+                        <div class="form-group">
+                            <label>نوع السيارة:</label>
+                            <input type="text" id="newVehicleType" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>اللون:</label>
+                            <input type="text" id="newVehicleColor" required>
+                        </div>
+                        <div class="form-group">
+                            <label>سنة الصنع:</label>
+                            <input type="number" id="newVehicleYear" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>رقم هوية مالك السيارة:</label>
+                            <input type="text" id="newVehicleOwnerID" placeholder="أدخل رقم هوية المالك" required>
+                        </div>
+                        <div class="form-group">
+                            <label>حالة المركبة:</label>
+                            <select id="newVehicleStatus" required>
+                                <option value="">اختر الحالة</option>
+                                <option value="نظيفة">نظيفة</option>
+                                <option value="مسروقة">مسروقة</option>
+                                <option value="مطلوبة">مطلوبة</option>
+                                <option value="مشطوبة">مشطوبة</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">✅ حفظ بيانات السيارة</button>
+                </form>
+            </section>
+
+            <!-- Records Section -->
+            <section id="records" class="section">
+                <div class="section-header">
+                    <h2>📋 السجلات الأمنية</h2>
+                </div>
+                <div class="records-container">
+                    <div class="records-search">
+                        <input type="text" id="recordsSearchInput" placeholder="ابحث برقم الهوية أو لوحة السيارة">
+                        <button onclick="searchRecords()" class="search-btn">بحث</button>
+                    </div>
+                    <div id="recordsTable" class="records-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>رقم الهوية</th>
+                                    <th>لوحة السيارة</th>
+                                    <th>المخالفات</th>
+                                    <th>الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recordsTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #999;">لم يتم تحميل السجلات بعد</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🔒 نظام قاعدة بيانات الشرطة | جميع الحقوق محفوظة © 2026</p>
+            <p>آخر تحديث: <span id="lastUpdate">-</span></p>
+        </footer>
+    </div>
+
+   <!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+
+<!-- Application Scripts - بعد Firebase -->
+
+
+    <!-- Application Scripts -->
+    <script src="police.js"></script>
+</body>
+</html>
